@@ -1,0 +1,32 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  /* Prevents scrollbars */
+  background-color: transparent;
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+}
+
+body {
+  /* These four lines are the key to perfect centering */
+  display: flex;
+  justify-content: center;
+  /* Center horizontally */
+  align-items: center;
+  /* Center vertically */
+  height: 100vh;
+  /* Make the body take up the full window height */
+}
+
+#command-input {
+  width: 600px;
+  padding: 16px;
+  font-size: 1.2em;
+  border-radius: 8px;
+  border: none;
+  background-color: rgba(40, 40, 40, 0.9);
+  color: #fff;
+  outline: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
