@@ -4,20 +4,23 @@
   "version": "0.1.0",
   "identifier": "com.harsh.complement",
   "build": {
-    "frontendDist": "../src"
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
   },
   "app": {
     "withGlobalTauri": true,
     "windows": [
       {
-        "fullscreen": false,
-        "height": 80,
-        "resizable": false,
         "title": "Complement",
-        "width": 715,
+        "width": 1920,
+        "height": 1080,
         "decorations": false,
         "transparent": true,
+        "fullscreen": true,
         "center": true,
+        "resizable": false,
         "alwaysOnTop": true
       }
     ],
