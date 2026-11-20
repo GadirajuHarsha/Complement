@@ -1,4 +1,4 @@
-# 🚀 Complement: AI-Powered Desktop Assistant
+# Complement
 
 [![Rust](https://img.shields.io/badge/rust-%23000000.svg?style=for-the-badge&logo=rust&logoColor=white)](https://www.rust-lang.org/)
 [![Tauri](https://img.shields.io/badge/tauri-%2324C8DB.svg?style=for-the-badge&logo=tauri&logoColor=%23FFFFFF)](https://tauri.app/)
@@ -6,128 +6,105 @@
 [![ONNX](https://img.shields.io/badge/ONNX-005CED?style=for-the-badge&logo=onnx&logoColor=white)](https://onnx.ai/)
 [![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white)](https://sqlite.org/)
 
-> **A next-generation productivity assistant that learns your workflow patterns and predicts your next action with 90%+ accuracy.**
+A local desktop launcher and productivity assistant built with Rust, Tauri, and ONNX. Complement runs offline, indexes your system, and uses a lightweight neural network to predict your next application or action based on workflow patterns.
 
-## ⚡ **Performance Metrics**
-- **75% reduction** in application access time
-- **Sub-10ms** ML inference latency 
-- **90%+ prediction accuracy** after 1 week of usage
-- **Zero network dependency** - fully local AI processing
-- **<50MB memory footprint** with real-time monitoring
+## Performance & Benchmarks
 
-## 🧠 **AI & Machine Learning**
+- **Search latency:** <5ms across 10k+ indexed items
+- **ML inference:** <10ms per prediction via ONNX Runtime
+- **Cold start:** <200ms to first render
+- **Memory footprint:** <50MB baseline (<100MB peak)
+- **CPU usage:** <1% background utilization
+- **Accuracy:** 90%+ prediction accuracy after roughly one week of usage (75% reduction in app access time)
 
-### Neural Network Architecture
-- **8-dimensional feature engineering**: Time patterns, usage frequency, context similarity, productivity scoring
-- **PyTorch training pipeline**: Custom neural network with dropout regularization and batch normalization
-- **ONNX Runtime deployment**: Optimized inference with dynamic batching and quantization
-- **Context-aware predictions**: Learns from window context, clipboard content, and temporal patterns
+## Features
 
-### Training Pipeline
-```bash
-# Generate training data from usage analytics
-python ml_training/train_model.py
+| Feature | Implementation | Notes |
+|---------|---------------|-------|
+| **Instant Search** | Fuzzy matching via `SkimMatcher` | <5ms response time |
+| **Action Predictions** | ONNX Runtime + 8-dimensional features | Runs entirely locally |
+| **Clipboard History** | SQLite with content type detection | Unlimited local storage |
+| **Snippet Expansion** | Keyword-triggered templates | Sub-second text expansion |
+| **Web Search** | Multi-engine support | Parallel query execution |
+| **Privacy** | Local-only processing | Zero telemetry or network calls |
 
-# Model artifacts generated:
-├── complement_recommendation_model.onnx  # Optimized inference model
-├── app_labels.txt                       # Application class mappings  
-└── model_info.json                      # Model metadata & performance metrics
-```
-
-## 🏗️ **System Architecture**
+## Architecture
 
 ### Frontend (TypeScript + Vite)
-- **Transparent overlay system** with click-through functionality
-- **Dynamic UI adaptation** based on content and context
-- **Smooth animations** using CSS transforms and opacity transitions
-- **Real-time search** with fuzzy matching and highlighting
+- Transparent, borderless overlay window with click-through support
+- Dynamic window resizing based on query results
+- CSS transform and opacity transitions
+- Real-time fuzzy search with match highlighting
 
 ### Backend (Rust + Tauri)
-- **Global hotkey interception** using Windows API
-- **Encrypted SQLite analytics** with PRAGMA security features
-- **Clipboard monitoring** with content type detection
-- **Multi-threaded ML inference** with async/await patterns
+- Global hotkey registration via the Windows API
+- Local SQLite database configured with security `PRAGMA` settings
+- Background clipboard monitoring and content classification
+- Multi-threaded async ML inference
 
-### ML Infrastructure (Python + ONNX)
-- **Synthetic data generation** for cold-start scenarios  
-- **Feature normalization** and preprocessing pipeline
-- **Cross-validation** with stratified splits for robust evaluation
-- **Model versioning** and A/B testing framework
+### ML Pipeline (Python + PyTorch + ONNX)
+- **Feature Engineering:** 8-dimensional feature vector covering temporal patterns, usage frequency, context similarity, and productivity scoring
+- **Training:** PyTorch neural network utilizing batch normalization and dropout regularization, validated with stratified cross-validation splits
+- **Deployment:** Exported to quantized ONNX format for fast, zero-dependency inference in Rust
+- **Cold Start:** Includes synthetic data generation for initial baseline weights before user history accumulates
 
-## 🎯 **Core Features**
+```bash
+# Train the model and generate inference artifacts
+python ml_training/train_model.py
 
-| Feature | Implementation | Performance |
-|---------|---------------|-------------|
-| **Instant Search** | Fuzzy matching with SkimMatcher | <5ms response time |
-| **ML Predictions** | ONNX Runtime + 8D features | 90%+ accuracy |
-| **Clipboard History** | SQLite + content analysis | Unlimited storage |
-| **Snippet Expansion** | Keyword-triggered templates | Sub-second expansion |
-| **Web Search Integration** | Multi-engine support | Parallel queries |
-| **Privacy Protection** | Local-only processing | Zero telemetry |
+# Output artifacts:
+├── complement_recommendation_model.onnx  # Quantized inference model
+├── app_labels.txt                       # Application class mappings
+└── model_info.json                      # Model metadata & evaluation metrics
+```
 
-## 🚀 **Getting Started**
+## Getting Started
 
 ### Prerequisites
 ```bash
-# Install Rust toolchain
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+# Install Rust
+curl --proto '=https' --tlsv1.2 -sSf [https://sh.rustup.rs](https://sh.rustup.rs) | sh
 
-# Install Node.js dependencies
+# Install frontend dependencies
 npm install
 
 # Install Python ML dependencies
 pip install torch torchvision pandas numpy scikit-learn onnx
 ```
 
-### Development
+### Build & Run
 ```bash
-# Start development server (hot reload)
+# Run in development mode with hot reload
 cargo tauri dev
 
-# Build for production
+# Build production binary
 cargo tauri build
 
-# Train ML model (optional)
+# Retrain the ML model locally (optional)
 cd ml_training && python train_model.py
 ```
 
 ### Usage
-1. **Activate**: Press `Ctrl+Alt+Space` from anywhere
-2. **Search**: Type to find apps, files, or execute commands
-3. **ML Mode**: Type `ml` or `ai` for intelligent predictions
-4. **Clipboard**: Type `c` for clipboard history
-5. **Snippets**: Type `:keyword` for text expansion
+1. **Toggle:** Press `Ctrl+Alt+Space` anywhere to open the command bar
+2. **Search:** Type to fuzzy-search apps, files, or run system commands
+3. **Predictions:** Type `ml` or `ai` to view context-based recommendations
+4. **Clipboard:** Type `c` to search clipboard history
+5. **Snippets:** Type `:keyword` to expand saved text snippets
 
-## 📊 **Technical Specifications**
+## Implementation Notes
 
-### Performance Benchmarks
-- **Cold start**: <200ms to first render
-- **Search latency**: <5ms for 10k+ indexed items  
-- **ML inference**: <10ms for prediction generation
-- **Memory usage**: <50MB baseline, <100MB peak
-- **CPU impact**: <1% background utilization
-
-### Security & Privacy
-- **Local-first architecture**: No network dependencies for core functionality
-- **Encrypted storage**: SQLite with PRAGMA security configurations
-- **Memory safety**: Rust's ownership system prevents buffer overflows
-- **Process isolation**: Tauri security model with restricted permissions
-
-## 🧪 **Development Highlights**
-
-### Advanced Rust Patterns
+### Async ML Inference (Rust)
 ```rust
-// Async ML inference with error handling
 #[tauri::command]
 async fn get_ml_recommendations(
     db: tauri::State<'_, Mutex<Connection>>,
     index: tauri::State<'_, Vec<App>>
 ) -> Result<Vec<MLPrediction>, String> {
-    // Feature engineering + ONNX Runtime integration
+    // Extracts 8D context features and runs ONNX Runtime session
 }
 ```
 
-### Neural Network Training
+### Recommendation Model (PyTorch)
 ```python
 class ComplementRecommendationModel(nn.Module):
     def __init__(self, input_size, num_classes):
@@ -137,93 +114,36 @@ class ComplementRecommendationModel(nn.Module):
             nn.BatchNorm1d(128),
             nn.ReLU(),
             nn.Dropout(0.3),
-            # ... sophisticated architecture
+            # ...
         )
 ```
 
-### Cross-Platform Integration
+### Hotkey Focus Handling (TypeScript)
 ```typescript
-// Global hotkey with Tauri event system
 listen("focus-input", () => {
     commandInputEl?.focus();
     updatePreview();
 });
 ```
 
-## 📈 **Future Roadmap**
+## Roadmap & Project Status
 
-- [ ] **Multi-modal AI**: Vision + NLP for screen content understanding
-- [ ] **Federated Learning**: Privacy-preserving model updates across devices
-- [ ] **Plugin Architecture**: Third-party integrations and custom workflows  
-- [ ] **Voice Interface**: Speech recognition for hands-free operation
-- [ ] **Cloud Sync**: Optional encrypted backup with E2E encryption
+**Current Status:** ~95% Complete (Phases 1, 2, and 4 complete; Phase 3 in progress)
 
-## 🏆 **Technical Achievements**
+### Remaining Tasks (Priority Order)
+1. **Complement Notes System (High):** Add a SQLite notes table and text parsing to extract user intent and feed it into the ML context pipeline.
+2. **UI Polish & Animations (High):** Refine window translucency effects, fade transitions, and micro-interactions.
+3. **Task Transition Intelligence (Medium):** Incorporate time-tracking heuristics to suggest workflow transitions (e.g., active work to break states).
+4. **Cluster Launch System (Low):** Support grouping multiple applications to launch simultaneously via a single command.
+5. **Extended System Commands (Low):** Add native OS power commands (sleep, restart, shutdown).
 
-- **Zero-dependency AI**: Complete ML pipeline without external API calls
-- **Sub-frame rendering**: 60+ FPS animations with GPU acceleration  
-- **Memory efficiency**: Custom allocators and lazy loading strategies
-- **Cross-compilation**: Single codebase targeting Windows, macOS, Linux
-- **Production hardening**: Extensive error handling and graceful degradation
+### Future Exploration
+- Multi-modal screen context understanding (Vision + NLP)
+- Federated learning for privacy-preserving cross-device model updates
+- Third-party plugin API and custom workflow scripting
+- Local speech-to-text voice interface
+- Optional end-to-end encrypted cloud sync
 
-## 📝 **License & Attribution**
+## License
 
-MIT License - Built with ❤️ using modern Rust and AI technologies.
-
----
-
-*Complement represents the intersection of systems programming excellence and cutting-edge AI, delivering a productivity experience that adapts to your unique workflow patterns.*
-
-# Complement - Remaining Implementation Priority List
-
-## 🔄 Phase 3 - Outstanding Features (In Priority Order)
-
-### **HIGH PRIORITY - Resume Enhancement**
-
-#### 1. Complement Notes System 
-- **Technical Value**: NLP integration, text parsing, dynamic intent recognition
-- **Implementation**: SQLite notes table + text analysis for recommendation context
-- **Resume Impact**: Shows text processing and dynamic ML feature integration
-- **Complexity**: Medium (2-3 days)
-
-#### 2. Advanced UI Polish & Animations
-- **Technical Value**: Advanced CSS/frontend skills, smooth UX transitions  
-- **Implementation**: Translucency effects, refined fade animations, micro-interactions
-- **Resume Impact**: Demonstrates attention to detail and frontend expertise
-- **Complexity**: Medium (2-3 days)
-
-### **MEDIUM PRIORITY - Product Features**
-
-#### 3. Notes Integration with ML Pipeline
-- **Technical Value**: Dynamic feature engineering from user text input
-- **Implementation**: Parse notes content → extract intent → modify ML predictions
-- **Resume Impact**: Shows sophisticated ML context integration
-- **Complexity**: High (3-4 days)
-
-#### 4. Task Transition Intelligence
-- **Technical Value**: Time-based ML predictions, behavioral pattern analysis
-- **Implementation**: Time tracking + contextual suggestions (work → break transitions)
-- **Resume Impact**: Shows predictive analytics capabilities
-- **Complexity**: Medium (2-3 days)
-
-### **LOW PRIORITY - Nice-to-Have**
-
-#### 5. Cluster Launch System
-- **Technical Value**: Configuration management, batch operations
-- **Implementation**: App grouping + simultaneous launch functionality
-- **Resume Impact**: Minimal (basic feature)
-- **Complexity**: Low (1-2 days)
-
-#### 6. Enhanced System Commands
-- **Technical Value**: Extended OS integration
-- **Implementation**: Additional system utilities (sleep, shutdown, etc.)
-- **Resume Impact**: Low (demonstrates basic OS integration)
-- **Complexity**: Low (1 day)
-
----
-
-## 📊 **Current Project Status**: 95% Complete
-- ✅ **Phase 1**: Complete (Power Launcher)
-- ✅ **Phase 2**: Complete (Productivity Suite)
-- 🔄 **Phase 3**: 40% Complete (Missing notes + polish)
-- ✅ **Phase 4**: Complete (Advanced ML Intelligence)
+MIT License
